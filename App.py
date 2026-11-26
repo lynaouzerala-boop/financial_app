@@ -2,10 +2,11 @@ import streamlit as st
 from fpdf import FPDF
 import arabic_reshaper
 from bidi.algorithm import get_display
+import matplotlib
 import os
 
-# استخدام خط النظام المدمج في خوادم Streamlit (يدعم العربية بالكامل)
-font_file = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+# استخراج مسار خط DejaVuSans المدمج داخل مكتبة matplotlib (يدعم العربية)
+font_file = os.path.join(os.path.dirname(matplotlib.__file__), "mpl-data", "fonts", "ttf", "DejaVuSans.ttf")
 
 # دالة لمعالجة النص العربي (ربط الحروف وعكس الاتجاه)
 def format_arabic(text):
@@ -22,7 +23,7 @@ if st.button("حساب وتوليد قائمة الدخل (PDF)"):
     net_income = revenue - expenses
     st.success(f"صافي الربح: ${net_income:,.2f}")
 
-    # إنشاء ملف PDF مع الخط العربي المدمج
+    # إنشاء ملف PDF باستخدام الخط المستخرج
     pdf = FPDF()
     pdf.add_page()
     pdf.add_font("ArabicFont", "", font_file)
@@ -46,4 +47,3 @@ if st.button("حساب وتوليد قائمة الدخل (PDF)"):
         file_name="income_statement.pdf",
         mime="application/pdf"
     )
-
