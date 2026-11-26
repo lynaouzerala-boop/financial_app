@@ -2,14 +2,10 @@ import streamlit as st
 from fpdf import FPDF
 import arabic_reshaper
 from bidi.algorithm import get_display
-import urllib.request
 import os
 
-# تحميل الخط العربي تلقائياً إذا لم يكن موجوداً
-font_file = "Amiri-Regular.ttf"
-if not os.path.exists(font_file):
-    url = "https://github.com"
-    urllib.request.urlretrieve(url, font_file)
+# استخدام خط النظام المدمج في خوادم Streamlit (يدعم العربية بالكامل)
+font_file = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 # دالة لمعالجة النص العربي (ربط الحروف وعكس الاتجاه)
 def format_arabic(text):
@@ -26,7 +22,7 @@ if st.button("حساب وتوليد قائمة الدخل (PDF)"):
     net_income = revenue - expenses
     st.success(f"صافي الربح: ${net_income:,.2f}")
 
-    # إنشاء ملف PDF مع الخط العربي
+    # إنشاء ملف PDF مع الخط العربي المدمج
     pdf = FPDF()
     pdf.add_page()
     pdf.add_font("ArabicFont", "", font_file)
